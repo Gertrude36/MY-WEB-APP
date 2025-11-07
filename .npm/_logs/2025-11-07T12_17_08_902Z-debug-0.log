@@ -1,0 +1,29 @@
+0 verbose cli /usr/bin/node /usr/bin/npm
+1 info using npm@11.6.1
+2 info using node@v24.11.0
+3 silly config load:file:/usr/lib/node_modules/npm/npmrc
+4 silly config load:file:/home/gertrude/my-web-app/.npmrc
+5 silly config load:file:/home/gertrude/.npmrc
+6 silly config load:file:/usr/etc/npmrc
+7 verbose title npm init
+8 verbose argv "init" "--yes"
+9 verbose logfile logs-max:10 dir:/home/gertrude/.npm/_logs/2025-11-07T12_17_08_902Z-
+10 verbose logfile /home/gertrude/.npm/_logs/2025-11-07T12_17_08_902Z-debug-0.log
+11 silly logfile done cleaning log files
+12 silly package data {
+12 silly package data   name: 'my-web-app',
+12 silly package data   version: '1.0.0',
+12 silly package data   description: '',
+12 silly package data   main: 'index.js',
+12 silly package data   scripts: { test: 'echo "Error: no test specified" && exit 1' },
+12 silly package data   keywords: [],
+12 silly package data   author: '',
+12 silly package data   license: 'ISC',
+12 silly package data   type: 'commonjs'
+12 silly package data }
+13 verbose cwd /home/gertrude/my-web-app
+14 verbose os Linux 6.6.87.2-microsoft-standard-WSL2
+15 verbose node v24.11.0
+16 verbose npm  v11.6.1
+17 verbose exit 0
+18 info ok
