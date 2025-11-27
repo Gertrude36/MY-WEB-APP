@@ -1,33 +1,49 @@
-pipeline {
-    agent any
-    environment {
-        DOCKER_HUB_CRED = 'docker-hub-cred'   // Jenkins credentials ID
-        IMAGE_NAME = 'gertrude36/my-web-app'  // Replace with your Docker Hub repo
-        IMAGE_TAG = 'latest'
-    }
-    stages {
-        stage('Build') {
-            steps {
-                echo "Building the project..."
-                bat 'dir'   // For Windows; use sh 'ls -la' for Linux/macOS
-            }
-        }
-        stage('Test') {
-            steps {
-                echo "Running tests..."
-            }
-        }
-        stage('Deploy') {
-            steps {
-                echo "Building and pushing Docker image..."
-                script {
-                    // Build and push Docker image to Docker Hub
-                    docker.withRegistry('https://index.docker.io/v1/', "${DOCKER_HUB_CRED}") {
-                        def app = docker.build("${IMAGE_NAME}:${IMAGE_TAG}")
-                        app.push()
-                    }
-                }
-            }
-        }
-    }
-}
+pipeline { 
+    agent any 
+ 
+    environment { 
+        DOCKER_IMAGE = 'dockerhub_username/my-web-app' 
+        DOCKER_CREDENTIALS_ID = 'docker-hub-credentials'  // Jenkins credentials ID 
+    } 
+    stages { 
+        stage('Build Docker Image') { 
+            steps { 
+                script { 
+                    dockerImage = docker.build("${DOCKER_IMAGE}:latest") 
+                } 
+            } 
+        } 
+pipeline { 
+    agent any 
+ 
+    environment { 
+        DOCKER_IMAGE = 'dockerhub_username/my-web-app' 
+        DOCKER_CREDENTIALS_ID = 'docker-hub-credentials' 
+    } 
+ 
+    stages { 
+        stage('Checkout') { 
+            steps { 
+                checkout scm 
+            } 
+        } 
+ 
+        stage('Build Docker Image') { 
+            steps { 
+                script { 
+                    dockerImage = docker.build("${DOCKER_IMAGE}:latest") 
+                } 
+            } 
+        } 
+ 
+        stage('Push to Docker Hub') { 
+            steps { 
+                script { 
+                    docker.withRegistry('https://index.docker.io/v1/', DOCKER_CREDENTIALS_ID) { 
+                        dockerImage.push('latest') 
+ 
+                    } 
+                } 
+            } 
+        } 
+    } 
