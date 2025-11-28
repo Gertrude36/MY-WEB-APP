@@ -1,4 +1,4 @@
-name: Release
+name: Release Node.js App
 
 on:
   push:
@@ -10,32 +10,44 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '20'
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
 
-    - name: Install dependencies
-      run: npm install
+      - name: Install dependencies
+        run: npm install
 
-    - name: Build Docker image
-      run: |
-        docker build -t my-nodejs-app:latest .
+      - name: Build Docker image
+        run: |
+          docker build -t my-nodejs-app:latest .
 
-    - name: Set up Helm
-      uses: azure/setup-helm@v3
-      with:
-        version: v3.14.0
+      - name: Start Minikube
+        run: |
+          curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+          sudo install minikube-linux-amd64 /usr/local/bin/minikube
+          minikube start --driver=docker
 
-    - name: Deploy Helm chart
-      run: |
-        helm upgrade --install my-release ./nodejs-app \
-          --set image.repository=my-nodejs-app \
-          --set image.tag=latest \
-          --set replicaCount=2
+      - name: Load Docker image into Minikube
+        run: minikube image load my-nodejs-app:latest
+
+      - name: Set up Helm
+        run: |
+          curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+          helm version
+
+      - name: Deploy Helm chart
+        run: helm upgrade --install my-release ./nodejs-app
+
+      - name: Verify deployment
+        run: |
+          helm list
+          kubectl get pods
+          kubectl get svc
+
 
 
 
