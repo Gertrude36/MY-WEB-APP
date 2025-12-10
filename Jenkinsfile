@@ -47,4 +47,8 @@ pipeline {
             } 
         } 
     } 
-
+<<<<<<< HEAD
+(your local master version)
+=======
+(remote master version)
+>>>>>>> origin/master
